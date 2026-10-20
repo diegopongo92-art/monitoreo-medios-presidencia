@@ -79,6 +79,9 @@ td{padding:0;border:0}
 td:nth-child(1){width:50%;order:1;font-size:11px}td:nth-child(3){width:50%;order:2;text-align:right}
 td:nth-child(2){width:100%;order:3}td:nth-child(4){width:100%;order:4;font-size:12px}td:nth-child(5){width:100%;order:5;margin-top:5px}.bl{display:block;text-align:center}
 .dc input{width:100%;flex:none}.rb>div{min-width:100%}.kb h2{font-size:36px}}
+.c3{grid-column:span 3}.c4{grid-column:span 4}.c6{grid-column:span 6}.c8{grid-column:span 8}.c12{grid-column:span 12}
+@media(max-width:999px){.c3,.c4,.c6,.c8{grid-column:span 12}}
+@media(min-width:1000px){body.fit{height:100vh;overflow:hidden;display:flex;flex-direction:column}body.fit .main{flex:1;min-height:0;display:flex;flex-direction:column;margin:8px auto;width:100%;max-width:1600px}body.fit .view.on{flex:1;min-height:0}body.fit .gr{height:100%;grid-template-rows:1fr 1fr;gap:10px}body.fit .cc{display:flex;flex-direction:column;min-height:0;padding:10px 14px}body.fit .cc h3{margin:0 0 4px}body.fit .cv{flex:1;height:auto;min-height:0}body.fit .kb{height:100%;display:flex;flex-direction:column;justify-content:center;padding:14px}body.fit .kb h2{font-size:clamp(28px,5.5vh,50px);margin:6px 0}body.fit .mbar{margin-bottom:8px}body.fit nav{padding-top:6px;padding-bottom:6px}}
 </style></head><body>
 <header><div class="hl"><div class="logo"><img src="presidencia.png" alt="Logo Presidencia" onerror="this.style.display='none'"></div>
 <div><h1>Monitoreo de Medios</h1><div class="sb">PRESIDENCIA DE LA REPÚBLICA DEL PERÚ</div></div></div><div id="dc">Conectando…</div></header>
@@ -104,26 +107,9 @@ td:nth-child(2){width:100%;order:3}td:nth-child(4){width:100%;order:4;font-size:
 <div class="tbx" id="pdfbox"><table><thead><tr><th style="width:11%">Fecha</th><th style="width:27%">Titular / Medio</th><th style="width:10%">Tono</th><th style="width:42%">Resumen</th><th style="width:10%">Enlace</th></tr></thead><tbody id="tbody"><tr><td colspan="5" style="text-align:center;padding:50px;color:#6b5d61;font-weight:700">Sincronizando datos, un momento…</td></tr></tbody></table></div>
 <div id="ayer-c" style="text-align:center;margin:14px 0 30px;display:none"><button class="ba g" id="btn-ayer" onclick="togAyer()" style="padding:10px 20px"></button></div>
 </section>
-<section class="view" id="v-general"><div class="gr">
-<div class="cc k"><div class="kb"><h4>Total menciones</h4><h2 id="g-tot">0</h2><small id="g-tr">--</small></div></div>
-<div class="cc w8"><h3>Menciones en el tiempo</h3><div class="cv"><canvas id="c-time"></canvas></div></div>
-<div class="cc"><h3>Tipo de medio (%)</h3><div class="cv"><canvas id="c-tipo"></canvas></div></div>
-<div class="cc"><h3>¿De quién se habla? (top)</h3><div class="cv"><canvas id="c-quien"></canvas></div></div>
-<div class="cc"><h3>Eje de gestión (top 10)</h3><div class="cv"><canvas id="c-eje"></canvas></div></div>
-<div class="cc"><h3>Origen de posicionamiento</h3><div class="cv"><canvas id="c-ori"></canvas></div></div>
-</div></section>
-<section class="view" id="v-semaforo"><div class="gr">
-<div class="cc w8"><h3>Menciones por criterio de imagen</h3><div class="cv"><canvas id="s-time"></canvas></div></div>
-<div class="cc k"><h3>Proporción</h3><div class="cv"><canvas id="s-pie"></canvas></div></div>
-<div class="cc"><h3>Medios con más menciones negativas</h3><div class="cv"><canvas id="s-neg"></canvas></div></div>
-<div class="cc"><h3>Criterio por ¿de quién se habla?</h3><div class="cv"><canvas id="s-quien"></canvas></div></div>
-<div class="cc w"><h3>Criterio por tipo de medio</h3><div class="cv"><canvas id="s-tipo"></canvas></div></div>
-</div></section>
-<section class="view" id="v-ahorro"><div class="gr">
-<div class="cc k"><div class="kb"><h4>Ahorro publicitario</h4><h2 id="a-tot">S/ 0</h2><small>Solo menciones positivas</small></div></div>
-<div class="cc w8"><h3>Ahorro por tipo de medio</h3><div class="cv"><canvas id="a-tipo"></canvas></div></div>
-<div class="cc w"><h3>Ahorro por ¿de quién se habla?</h3><div class="cv"><canvas id="a-quien"></canvas></div></div>
-</div></section>
+<section class="view" id="v-general"><div class="gr"><div class="cc c3"><div class="kb"><h4>Total menciones</h4><h2 id="g-tot">0</h2><small id="g-tr">--</small></div></div><div class="cc c6"><h3>Menciones en el tiempo</h3><div class="cv"><canvas id="c-time"></canvas></div></div><div class="cc c3"><h3>Tipo de medio (%)</h3><div class="cv"><canvas id="c-tipo"></canvas></div></div><div class="cc c4"><h3>¿De quién se habla?</h3><div class="cv"><canvas id="c-quien"></canvas></div></div><div class="cc c4"><h3>Eje de gestión</h3><div class="cv"><canvas id="c-eje"></canvas></div></div><div class="cc c4"><h3>Origen de posicionamiento</h3><div class="cv"><canvas id="c-ori"></canvas></div></div></div></section>
+<section class="view" id="v-semaforo"><div class="gr"><div class="cc c8"><h3>Línea de tiempo por criterio de imagen</h3><div class="cv"><canvas id="s-time"></canvas></div></div><div class="cc c4"><h3>Proporción</h3><div class="cv"><canvas id="s-pie"></canvas></div></div><div class="cc c4"><h3>Medios con más menciones negativas</h3><div class="cv"><canvas id="s-neg"></canvas></div></div><div class="cc c4"><h3>Criterio por ¿de quién se habla?</h3><div class="cv"><canvas id="s-quien"></canvas></div></div><div class="cc c4"><h3>Criterio por tipo de medio</h3><div class="cv"><canvas id="s-tipo"></canvas></div></div></div></section>
+<section class="view" id="v-ahorro"><div class="gr"><div class="cc c4"><div class="kb"><h4>Ahorro publicitario</h4><h2 id="a-tot">S/ 0</h2><small>Solo menciones positivas</small></div></div><div class="cc c8"><h3>Ahorro por tipo de medio</h3><div class="cv"><canvas id="a-tipo"></canvas></div></div><div class="cc c12"><h3>Ahorro por ¿de quién se habla?</h3><div class="cv"><canvas id="a-quien"></canvas></div></div></div></section>
 <section class="view" id="v-mapa"><div class="mp"><div class="pn"><svg id="map" viewBox="-3 -4 386 560"></svg><div class="lg"><span>Sin menciones</span><span style="width:14px;height:10px;background:#e3e0e1;border:1px solid #8d8186;border-radius:2px"></span><i></i><span id="lg1">1</span></div><div class="ch" id="chips"></div></div><div class="pn" id="panel"></div></div></section>
 </div>
 <script>
@@ -491,16 +477,17 @@ const CH={},O={responsive:true,maintainAspectRatio:false};Chart.register(ChartDa
 function mk(id,cfg){CH[id]&&CH[id].destroy();CH[id]=new Chart($('#'+id),cfg)}
 const grp=(a,fn,n=10,w)=>{const m={};a.forEach(r=>{const k=fn(r);if(k)m[k]=(m[k]||0)+(w?w(r):1)});return Object.entries(m).sort((x,y)=>y[1]-x[1]).slice(0,n)};
 const DL=o=>({display:true,clip:false,color:'#222',anchor:'end',align:'end',font:{weight:'700',size:11},...o});
-function bars(id,e,col=RED,fmt=v=>v,pad=64){$('#'+id).parentNode.style.height=Math.max(200,e.length*34+50)+'px';mk(id,{type:'bar',data:{labels:e.map(x=>x[0]),datasets:[{data:e.map(x=>x[1]),backgroundColor:col,borderRadius:5}]},options:{...O,indexAxis:'y',layout:{padding:{right:pad,top:6,bottom:4}},plugins:{legend:{display:false},datalabels:DL({formatter:fmt})},scales:{x:{display:false,beginAtZero:true,grace:'18%'},y:{grid:{display:false},ticks:{callback(v){const l=this.getLabelForValue(v);return l.length>24?l.slice(0,23)+'…':l}}}}}})}
+const FIT=()=>innerWidth>=1000,fitH=(id,h)=>{$('#'+id).parentNode.style.height=FIT()?'':h+'px'},wrap=(t,n=26)=>{const o=[];let l='';String(t).split(' ').forEach(x=>{if((l+' '+x).trim().length>n&&l){o.push(l);l=x}else l=(l+' '+x).trim()});o.push(l);return o};
+function bars(id,e,col=RED,fmt=v=>v,pad=64){fitH(id,Math.max(200,e.length*34+50));mk(id,{type:'bar',data:{labels:e.map(x=>wrap(x[0],FIT()?36:26)),datasets:[{data:e.map(x=>x[1]),backgroundColor:col,borderRadius:5}]},options:{...O,indexAxis:'y',layout:{padding:{right:pad,top:6,bottom:4}},plugins:{legend:{display:false},datalabels:DL({formatter:fmt})},scales:{x:{display:false,beginAtZero:true,grace:'18%'},y:{grid:{display:false},ticks:{autoSkip:false,font:{size:FIT()?10:11}}}}}})}
 function pie(id,l,d,col){mk(id,{type:'doughnut',data:{labels:l,datasets:[{data:d,backgroundColor:col,borderWidth:2}]},options:{...O,layout:{padding:8},cutout:'55%',plugins:{legend:{position:'bottom'},datalabels:DL({color:'#fff',anchor:'center',align:'center',formatter:(v,c)=>{const s=c.dataset.data.reduce((a,b)=>a+b,0);return v&&s?Math.round(v/s*100)+'%':''}})}}})}
-function stack(id,labels,get,hz){if(hz)$('#'+id).parentNode.style.height=Math.max(220,labels.length*40+80)+'px';mk(id,{type:'bar',data:{labels,datasets:Object.keys(T).map(k=>({label:k,data:labels.map(l=>get(l,k)),backgroundColor:T[k]}))},options:{...O,indexAxis:hz?'y':'x',plugins:{legend:{position:'bottom'},datalabels:DL({color:'#fff',anchor:'center',align:'center',display:c=>c.dataset.data[c.dataIndex]>0})},layout:{padding:{top:8,right:12}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}}}})}
+function stack(id,labels,get,hz){if(hz)fitH(id,Math.max(220,labels.length*40+80));mk(id,{type:'bar',data:{labels:labels.map(l=>wrap(l)),datasets:Object.keys(T).map(k=>({label:k,data:labels.map(l=>get(l,k)),backgroundColor:T[k]}))},options:{...O,indexAxis:hz?'y':'x',plugins:{legend:{position:'bottom'},datalabels:DL({color:'#fff',anchor:'center',align:'center',display:c=>c.dataset.data[c.dataIndex]>0})},layout:{padding:{top:8,right:12}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,ticks:{precision:0,autoSkip:false}}}}})}
 const days=A=>[...new Set(A.filter(r=>r.ts).map(r=>r.ts))].sort((a,b)=>a-b);const dl=t=>{const d=new Date(t);return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')};
-function draw(){setHdr();if(!ALL.length&&tab!=='tabla')return;const A=MD();
+function draw(){document.body.classList.toggle('fit',['general','semaforo','ahorro'].includes(tab));setHdr();if(!ALL.length&&tab!=='tabla')return;const A=MD();
 if(tab==='general'){$('#g-tot').textContent=A.length;const m=$('#mes').value;let tr='--';if(m&&m!=='all'){let y=+m.slice(0,4),mo=+m.slice(5)-1;const p=mo?ymd(new Date(y,mo-1,1)).slice(0,7):(y-1)+'-12',n=MD(p).length;tr=n?((A.length-n)/n*100>=0?'▲ ':'▼ ')+Math.abs(Math.round((A.length-n)/n*100))+'% vs mes anterior':'Sin mes anterior'}$('#g-tr').textContent=tr;
 const d=days(A);mk('c-time',{type:'line',data:{labels:d.map(dl),datasets:[{data:d.map(t=>A.filter(r=>r.ts===t).length),borderColor:RED,backgroundColor:'#C8102E22',fill:true,tension:.3,pointRadius:4}]},options:{...O,layout:{padding:{top:30,right:16}},plugins:{legend:{display:false},datalabels:DL({align:'top',anchor:'end'})},scales:{y:{beginAtZero:true,grace:'18%',ticks:{precision:0}}}}});
 const tp=grp(A,r=>r.tipo);pie('c-tipo',tp.map(x=>x[0]),tp.map(x=>x[1]),['#C8102E','#8f0b21','#e4606f','#4b5563','#9ca3af','#f59e0b','#fca5a5']);
 bars('c-quien',grp(A,r=>r.quien));bars('c-eje',grp(A,r=>r.eje),DK);bars('c-ori',grp(A,r=>r.ori),'#e4606f')}
-if(tab==='semaforo'){const d=days(A);stack('s-time',d.map(dl),(l,k)=>A.filter(r=>dl(r.ts)===l&&r.t===k).length);const c=Object.keys(T).map(k=>A.filter(r=>r.t===k).length);pie('s-pie',Object.keys(T),c,Object.values(T));
+if(tab==='semaforo'){const d=days(A);mk('s-time',{type:'line',data:{labels:d.map(dl),datasets:Object.keys(T).map(k=>({label:k,data:d.map(t=>A.filter(r=>r.ts===t&&r.t===k).length),borderColor:T[k],backgroundColor:T[k],tension:.4,borderWidth:3,pointRadius:3}))},options:{...O,layout:{padding:{top:18,right:14}},plugins:{legend:{position:'bottom'},datalabels:DL({align:'top',anchor:'end',color:c=>T[c.dataset.label],display:c=>c.dataset.data[c.dataIndex]>0})},scales:{y:{beginAtZero:true,grace:'15%',ticks:{precision:0}}}}});const c=Object.keys(T).map(k=>A.filter(r=>r.t===k).length);pie('s-pie',Object.keys(T),c,Object.values(T));
 bars('s-neg',grp(A.filter(r=>r.t==='Negativa'),r=>r.medio,5),T.Negativa);
 const sk=(fn)=>grp(A,fn,8).map(x=>x[0]);const q=sk(r=>r.quien);stack('s-quien',q,(l,k)=>A.filter(r=>r.quien===l&&r.t===k).length,1);const tp=sk(r=>r.tipo);stack('s-tipo',tp,(l,k)=>A.filter(r=>r.tipo===l&&r.t===k).length,1)}
 if(tab==='ahorro'){const P=A.filter(r=>r.t==='Positiva'&&r.val>0);$('#a-tot').textContent=money(P.reduce((s,r)=>s+r.val,0),2);bars('a-tipo',grp(P,r=>r.tipo||'Otros',10,r=>r.val),RED,v=>money(v),110);bars('a-quien',grp(P,r=>r.quien||'Otros',10,r=>r.val),DK,v=>money(v),110)}
@@ -521,5 +508,6 @@ el.innerHTML=`<div class="ph"><h2>${sel==='SIN'?'Sin ámbito indicado':tit(sel)}
 $('#bx').onclick=()=>{sel=null;draw()};if($('#bf'))$('#bf').onclick=()=>{$('#f-reg').value=sel;mode_('month');$('.tab[data-t=tabla]').click()}}
 $('#map').onclick=e=>{const p=e.target.closest('[data-r]');if(p){sel=p.dataset.r;draw()}};
 $('#chips').onclick=e=>{const c=e.target.closest('.chip');if(c){sel=c.dataset.s;draw()}};
+let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(draw,200)});
 init();setInterval(init,3e5);
 </script></body></html>
