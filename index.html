@@ -60,7 +60,7 @@ td{padding:14px;border-bottom:1px solid var(--bd);font-size:13px;line-height:1.5
 .mp{display:grid;grid-template-columns:minmax(300px,440px) 1fr;gap:14px}
 .pn{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:14px}
 #map{width:100%;max-height:72vh;display:block}
-.rg{stroke:#fff;stroke-width:1;cursor:pointer;transition:.15s}.rg:hover{stroke:var(--tx);stroke-width:2}.rg.on{stroke:var(--tx);stroke-width:3}
+.rg{stroke:#8d8186;stroke-width:.8;stroke-linejoin:round;cursor:pointer;transition:fill .15s}.rg:hover{stroke:#111;stroke-width:2}.rg.on{stroke:#111;stroke-width:3}.lg{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:var(--mu);margin-top:10px}.lg i{flex:1;height:10px;border-radius:6px;background:linear-gradient(90deg,#fdcdd4,#C8102E,#780618)}
 #map text{font-size:11px;font-weight:800;fill:#fff;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:#0008;stroke-width:2px}
 .ch{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chip{border:1px solid var(--bd);background:#fbf7f8;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer}.chip.on{border-color:var(--red);color:var(--red)}
 .ph{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}.ph h2{margin:0;font-size:20px;color:var(--red)}
@@ -124,7 +124,7 @@ td:nth-child(2){width:100%;order:3}td:nth-child(4){width:100%;order:4;font-size:
 <div class="cc w8"><h3>Ahorro por tipo de medio</h3><div class="cv"><canvas id="a-tipo"></canvas></div></div>
 <div class="cc w"><h3>Ahorro por ¿de quién se habla?</h3><div class="cv"><canvas id="a-quien"></canvas></div></div>
 </div></section>
-<section class="view" id="v-mapa"><div class="mp"><div class="pn"><svg id="map" viewBox="-3 -4 386 560"></svg><div class="ch" id="chips"></div></div><div class="pn" id="panel"></div></div></section>
+<section class="view" id="v-mapa"><div class="mp"><div class="pn"><svg id="map" viewBox="-3 -4 386 560"></svg><div class="lg"><span>Sin menciones</span><span style="width:14px;height:10px;background:#e3e0e1;border:1px solid #8d8186;border-radius:2px"></span><i></i><span id="lg1">1</span></div><div class="ch" id="chips"></div></div><div class="pn" id="panel"></div></div></section>
 </div>
 <script>
 const CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQdy_6rGtKKVbEsD9qVqv1YW2H1JSkoPRE8-UzhwNVlJ7-_m2gZ65Zk6P0MyWeVKH0s1QAQkwTK8Iv4/pub?output=csv';
@@ -506,10 +506,11 @@ const sk=(fn)=>grp(A,fn,8).map(x=>x[0]);const q=sk(r=>r.quien);stack('s-quien',q
 if(tab==='ahorro'){const P=A.filter(r=>r.t==='Positiva'&&r.val>0);$('#a-tot').textContent=money(P.reduce((s,r)=>s+r.val,0),2);bars('a-tipo',grp(P,r=>r.tipo||'Otros',10,r=>r.val),RED,v=>money(v),110);bars('a-quien',grp(P,r=>r.quien||'Otros',10,r=>r.val),DK,v=>money(v),110)}
 if(tab==='mapa'){map(A);panel(A)}}
 /* MAPA */
+const heat=(c,mx)=>{if(!c)return'#e3e0e1';const t=mx>1?Math.sqrt((c-1)/(mx-1)):1,a=[253,205,212],b=[120,6,24];return'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')+')'};
 function map(A){const n={},e={NACIONAL:0,INTERNACIONAL:0,SIN:0};REG.forEach(r=>n[r]=0);A.forEach(r=>{if(!r.regs.length)e.SIN++;r.regs.forEach(x=>x in n?n[x]++:e[x]++)});const mx=Math.max(1,...Object.values(n));
-$('#map').innerHTML=REG.map(r=>`<path class="rg${sel===r?' on':''}" data-r="${r}" d="${GEO.p[r]}" style="fill:${n[r]?RED:'#ece4e6'};fill-opacity:${n[r]?(.3+.7*n[r]/mx).toFixed(2):1}"><title>${tit(r)}: ${n[r]}</title></path>`).join('');
+$('#map').innerHTML=REG.map(r=>`<path class="rg${sel===r?' on':''}" data-r="${r}" d="${GEO.p[r]}" style="fill:${heat(n[r],mx)}"><title>${tit(r)}: ${n[r]}</title></path>`).join('');
 $$('#map path').forEach(p=>{const c=n[p.dataset.r];if(!c)return;const b=p.getBBox(),t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',b.x+b.width/2);t.setAttribute('y',b.y+b.height/2+4);t.textContent=c;$('#map').appendChild(t)});
-$('#chips').innerHTML=[['NACIONAL','Nacional'],['INTERNACIONAL','Internacional'],['SIN','Sin ámbito']].map(([k,l])=>`<button class="chip${sel===k?' on':''}" data-s="${k}">${l} <b>${e[k]}</b></button>`).join('')}
+$('#lg1').textContent=mx+' menciones';$('#chips').innerHTML=[['NACIONAL','Nacional'],['INTERNACIONAL','Internacional'],['SIN','Sin ámbito']].map(([k,l])=>`<button class="chip${sel===k?' on':''}" data-s="${k}">${l} <b>${e[k]}</b></button>`).join('')}
 function panel(A){const el=$('#panel');if(!sel){el.innerHTML='<p class="mu">Toca una región del mapa para ver las menciones vinculadas a la Presidencia: conteo, criterio de imagen, ejes y el detalle de cada nota.</p>';return}
 const L=A.filter(r=>sel==='SIN'?!r.regs.length:r.regs.includes(sel)),t={Positiva:0,Neutra:0,Negativa:0};let v=0;L.forEach(r=>{t[r.t]++;v+=r.val});
 el.innerHTML=`<div class="ph"><h2>${sel==='SIN'?'Sin ámbito indicado':tit(sel)}</h2><div>${REG.includes(sel)?'<button class="ba" id="bf">Ver en tabla</button> ':''}<button class="ba g" id="bx">Quitar</button></div></div>
