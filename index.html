@@ -5,7 +5,6 @@
 <title>Monitoreo de Medios | Presidencia de la República</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
@@ -96,6 +95,27 @@ td:nth-child(2){width:100%;order:3}td:nth-child(4){width:100%;order:4;font-size:
 .vg{background:#fbf7f8;border:1px dashed var(--bd);border-radius:10px;padding:16px;text-align:center;width:100%}
 .vf{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 16px;border-top:1px solid var(--bd);flex-wrap:wrap}
 @media(max-width:768px){.vw{padding:0}.vb{width:100%;height:100%;max-height:100%;border-radius:0}}
+@media print{
+@page{size:A4 landscape;margin:8mm}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body,body.fit{background:#fff;font-size:11px;height:auto!important;overflow:visible!important;display:block!important}
+nav,.mbar,.ab,.ct,#ayer-c,.vw,#config-acortador,#resumen-preview,.mz{display:none!important}
+header{box-shadow:none;padding:8px 12px}
+.main{margin:8px 0;padding:0;max-width:none}
+.sc{grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}.cd{padding:6px}.cd .v{font-size:20px}
+.tbx{border:0;border-radius:0;overflow:visible;background:none}
+table{display:table!important;width:100%;min-width:0;table-layout:fixed}
+thead{display:table-header-group!important}thead tr{display:table-row!important}
+tbody{display:table-row-group!important}
+tr{display:table-row!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;break-inside:avoid}
+th{position:static}
+th,td{display:table-cell!important}
+td{width:auto!important;order:0!important;text-align:left!important;padding:8px!important;border-bottom:1px solid #bbb!important;font-size:11px}
+th:nth-child(4){width:38%!important}th:nth-child(5){width:14%!important}
+.bl{display:none!important}
+.ext{display:block!important;background:#C8102E;color:#fff!important;text-align:center;font-size:16px;font-weight:800;padding:14px 4px;border-radius:8px;margin:0;text-decoration:none;text-transform:uppercase;letter-spacing:.6px}
+.ar{display:none}
+}
 </style></head><body>
 <header><div class="hl"><div class="logo"><img src="presidencia.png" alt="Logo Presidencia" onerror="this.style.display='none'"></div>
 <div><h1>Monitoreo de Medios</h1><div class="sb">PRESIDENCIA DE LA REPÚBLICA DEL PERÚ</div></div></div><div id="dc">Conectando…</div></header>
@@ -103,7 +123,7 @@ td:nth-child(2){width:100%;order:3}td:nth-child(4){width:100%;order:4;font-size:
 <div class="main">
 <div class="mbar" id="mbar"><label style="margin:0">Mes:</label><select id="mes"></select></div>
 <section class="view on" id="v-tabla">
-<div class="ab"><button class="bx w" id="btn-whatsapp-resumen" onclick="generarResumenWhatsApp()">📋 Copiar resumen</button><button class="bx g" onclick="resetT()">🔄 Restablecer</button><button class="bx x" onclick="excel()">📊 Excel</button><button class="bx p" onclick="pdf()">📄 PDF</button></div>
+<div class="ab"><button class="bx w" id="btn-whatsapp-resumen" onclick="generarResumenWhatsApp()">📋 Copiar resumen</button><button class="bx g" onclick="resetT()">🔄 Restablecer</button><button class="bx x" onclick="excel()">📊 Excel</button><button class="bx p" onclick="pdf()">🖨️ Imprimir / PDF</button></div>
 <div id="resumen-preview" style="display:none;background:#fff;border-radius:12px;border:1px solid var(--bd);padding:16px;margin-bottom:12px;white-space:pre-wrap;font-family:Menlo,Consolas,monospace;font-size:13px;line-height:1.7;position:relative"><button onclick="document.getElementById('resumen-preview').style.display='none'" style="position:absolute;top:10px;right:10px;background:#6b5d61;color:#fff;border:0;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer">✕ Cerrar</button><div style="font-size:11px;font-weight:800;color:#6b5d61;text-transform:uppercase;margin-bottom:10px">Vista previa del resumen (ya copiado al portapapeles)</div><div id="resumen-preview-text"></div></div>
 <div class="sc"><div class="cd"><div class="t"># Menciones</div><div class="v" id="n-t">0</div></div><div class="cd p"><div class="t"># Positivas</div><div class="v" id="n-p">0</div></div><div class="cd n"><div class="t"># Neutras</div><div class="v" id="n-n">0</div></div><div class="cd x"><div class="t"># Negativas</div><div class="v" id="n-x">0</div></div></div>
 <div class="ct">
@@ -176,13 +196,13 @@ CUR=D.filter(r=>(!q||(r.tit+' '+r.res).toLowerCase().includes(q))&&(!v('#f-tono'
 hourOK(r,hm));
 statusT();setHdr();const k=x=>CUR.filter(r=>r.t===x).length;$('#n-t').textContent=CUR.length;$('#n-p').textContent=k('Positiva');$('#n-n').textContent=k('Neutra');$('#n-x').textContent=k('Negativa');
 $('#tbody').innerHTML=CUR.slice(0,300).map((r,ix)=>{const c=r.t==='Positiva'?['p','#86efac']:r.t==='Negativa'?['x','#fc8181']:['n','#fde047'],hr=r.mt.split(/\s+/)[1];
-return`<tr style="background:${c[1]}"><td><div style="font-weight:700">${esc(r.fecha)}</div>${hr?`<div style="font-size:10px;color:#0009;font-weight:600;margin-top:4px">Registrado: ${esc(hr)}</div>`:''}</td><td><div style="font-weight:800;margin-bottom:5px">${esc(r.tit)}</div><div style="font-size:10px;color:#555;font-weight:800;text-transform:uppercase">${esc(r.medio)} (${esc(r.tipo)})</div></td><td><span class="bd ${c[0]}">${esc(r.tono||'Neutro')}</span></td><td style="font-weight:600">${esc(r.res)}</td><td style="text-align:center">${furl(r.link)?`<button class="bl" onclick="openV('t',${ix})">▶ Ver aquí</button><a class="ext" href="${esc(furl(r.link))}" target="_blank" rel="noopener">Abrir ↗</a>`:'<span class="mu">Sin enlace</span>'}</td></tr>`}).join('')||`<tr><td colspan="5" style="text-align:center;padding:50px;color:#6b5d61">${ALL.length?'No hay noticias para mostrar con estos filtros.<br><br><button class="ba g" onclick="mode_(\'month\')">Ver este mes</button>':'Aún no hay registros en el formulario.'}</td></tr>`}
+return`<tr style="background:${c[1]}"><td><div style="font-weight:700">${esc(r.fecha)}</div>${hr?`<div style="font-size:10px;color:#0009;font-weight:600;margin-top:4px">Registrado: ${esc(hr)}</div>`:''}</td><td><div style="font-weight:800;margin-bottom:5px">${esc(r.tit)}</div><div style="font-size:10px;color:#555;font-weight:800;text-transform:uppercase">${esc(r.medio)} (${esc(r.tipo)})</div></td><td><span class="bd ${c[0]}">${esc(r.tono||'Neutro')}</span></td><td style="font-weight:600">${esc(r.res)}</td><td style="text-align:center">${furl(r.link)?`<button class="bl" onclick="openV('t',${ix})">▶ Ver aquí</button><a class="ext" href="${esc(furl(r.link))}" target="_blank" rel="noopener">Abrir<span class="ar"> ↗</span></a>`:'<span class="mu">Sin enlace</span>'}</td></tr>`}).join('')||`<tr><td colspan="5" style="text-align:center;padding:50px;color:#6b5d61">${ALL.length?'No hay noticias para mostrar con estos filtros.<br><br><button class="ba g" onclick="mode_(\'month\')">Ver este mes</button>':'Aún no hay registros en el formulario.'}</td></tr>`}
 function hourOK(r,hm){if(hm<0)return true;if(mode==='ayer'){if(r.ts===AT){if(pd(r.mt)===HT)return true;if(r.hora!==-1&&r.hora<hm)return false}return true}return!(r.hora!==-1&&r.hora<hm)}
 function statusT(){const m={hoy:mostrarAyer?'Mostrando: Hoy + rezagos de ayer (notas de ayer registradas hoy)':'Mostrando: solo hoy',ayer:'Mostrando: Ayer y Hoy',specific:'Mostrando fecha seleccionada',rango:($('#rd').value&&$('#rh').value)?'Mostrando rango: '+$('#rd').value+' a '+$('#rh').value:'Elige fecha Desde y Hasta',month:'Mostrando: este mes'};let t=m[mode]||'';if($('#fh').value)t+=mode==='ayer'?' (ayer desde las '+$('#fh').value+' y todo hoy)':' (desde las '+$('#fh').value+')';$('#stt').textContent=t;$('#ayer-c').style.display=mode==='hoy'?'block':'none';$('#btn-ayer').textContent=mostrarAyer?'➖ Ocultar notas de ayer (registradas hoy)':'➕ Incluir notas de ayer (registradas hoy)'}
 function setHdr(){let t;if(tab==='tabla'){t=({hoy:mostrarAyer?'Hoy + rezagos de ayer':'Solo hoy',ayer:'Ayer + hoy',specific:'Fecha seleccionada',rango:'Rango personalizado',month:'Este mes'})[mode]+' · '+CUR.length+' notas'}else{const m=$('#mes').value;t=(!m||m==='all')?'Todo el período':MN[+m.slice(5)-1]+' '+m.slice(0,4);t=t[0].toUpperCase()+t.slice(1)+' · '+MD().length+' notas'}$('#dc').textContent=t}
 function togAyer(){mostrarAyer=!mostrarAyer;runT()}
 function excel(){const csv='\uFEFF'+Papa.unparse(CUR.map(r=>({'MARCA TEMPORAL':r.mt,FECHA:r.fecha,MEDIO:r.medio,'TIPO DE MEDIO':r.tipo,TITULAR:r.tit,RESUMEN:r.res,'VALORIZACIÓN MONETARIA':r.val,LINK:r.link,'ETIQUETA DE EVENTO':r.etq,'CRITERIO DE IMAGEN':r.tono,'EJE DE GESTIÓN':r.eje,'¿DE QUIÉN SE HABLA?':r.quien,'ORIGEN DE POSICIONAMIENTO':r.ori,'ÁMBITO GEOGRÁFICO':r.amb})));const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='Monitoreo_Presidencia.csv';a.click()}
-function pdf(){html2pdf().set({margin:6,filename:'Monitoreo_Presidencia.pdf',html2canvas:{scale:2},jsPDF:{orientation:'landscape',format:'a4'}}).from($('#v-'+tab)).save()}
+function pdf(){window.print()}
 /* RESUMEN WHATSAPP + ACORTADOR (del modelo) */
     function getEmojiTono(tono) {
         const t = (tono || '').toLowerCase();
@@ -559,6 +579,7 @@ PL=L;el.innerHTML=`<div class="ph"><h2>${sel==='SIN'?'Sin ámbito indicado':tit(
 $('#bx').onclick=()=>{sel=null;draw()};if($('#bf'))$('#bf').onclick=()=>{$('#f-reg').value=sel;mode_('month');$('.tab[data-t=tabla]').click()}}
 $('#map').onclick=e=>{const p=e.target.closest('[data-r]');if(p){sel=p.dataset.r;draw()}};
 $('#chips').onclick=e=>{const c=e.target.closest('.chip');if(c){sel=c.dataset.s;draw()}};
+const T0=document.title;addEventListener('beforeprint',()=>{document.title='Monitoreo_Presidencia_'+ymd(Date.now())});addEventListener('afterprint',()=>{document.title=T0});
 let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(draw,200)});
 init();setInterval(init,3e5);
 </script></body></html>
