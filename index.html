@@ -117,6 +117,7 @@ td:nth-child(2){width:100%!important;order:3}td:nth-child(4){width:100%!importan
 .vg2{width:100%}.vtb{display:flex;gap:8px;margin-bottom:10px}.vbody iframe{width:100%}
 .rd{text-align:left;font-size:14px;line-height:1.65;max-height:55vh;overflow:auto;background:#fff;border:1px solid var(--bd);border-radius:10px;padding:14px 16px}.rd p{margin:0 0 10px}
 .fcs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.fc{background:#f6f2f3;border-radius:14px;padding:4px 10px;font-size:11px;color:#333}
+.vg2 iframe{background:#fff}
 </style></head><body>
 <header><div class="hl"><div class="logo"><img src="presidencia.png" alt="Logo Presidencia" onerror="this.style.display='none'"></div>
 <div><h1>Monitoreo de Medios</h1><div class="sb">PRESIDENCIA DE LA REPÚBLICA DEL PERÚ</div></div></div><div id="dc">Conectando…</div></header>
@@ -535,30 +536,8 @@ if(r.res)h+='<div class="vs">'+esc(r.res)+'</div>';$('#vc').innerHTML=h;if(u&&!e
 
 $('#vx').onclick=closeV;$('#vp').onclick=()=>stepV(-1);$('#vn').onclick=()=>stepV(1);$('#vw').onclick=e=>{if(e.target.id==='vw')closeV()};
 addEventListener('keydown',e=>{if(!$('#vw').classList.contains('on'))return;if(e.key==='Escape')closeV();if(e.key==='ArrowLeft')stepV(-1);if(e.key==='ArrowRight')stepV(1)});
-/* VISTA INTEGRADA AUTOMÁTICA (diarios y webs) */
-let GT=0;
-const clean=t=>String(t).replace(/!\[[^\]]*\]\([^)]*\)/g,'').replace(/\[([^\]]*)\]\([^)]*\)/g,'$1');
-const md2p=t=>clean(t).split(/\n{2,}/).map(x=>x.replace(/^#+\s*/,'').replace(/[*_`>]/g,'').replace(/\s+/g,' ').trim()).filter(x=>x.length>=40);
-const isIP=u=>/ipnoticias(-latam)?\.com$/i.test(host(u));
-function ipParse(md){const U=re=>[...new Set((md.match(re)||[]).map(x=>x.replace(/&amp;/g,'&')))],t=clean(md).split('\n').map(l=>l.replace(/^[\s#\-*|>]+/,'').replace(/[*|]/g,'').trim()).filter(Boolean).join('\n'),g=re=>{const m=t.match(re);return m?m[1].trim():''},facts={};
-[['Fuente',/Fuente\n([^\n]+)/],['Página',/N°\s*Página\n([^\n]+)/],['Tamaño',/Tamaño\n([^\n]+)/],['Fecha',/Fecha de publicaci[oó]n\n([^\n]+)/],['Valorización',/Valorizaci[oó]n\n([^\n]+)/]].forEach(([k,re])=>{const v=g(re);if(v)facts[k]=v});
-let s=g(/Resumen\n([\s\S]*?)\n(?:OCR|Fuente)\n/);const i=s.indexOf(s.slice(0,40),40);if(i>0)s=s.slice(i);s=s.replace(/\s*(\.\.\.\s*)?Leer más\s*$/i,'').trim();
-return{site:'IP Noticias',text:s?[s]:[],facts,media:[...U(/https?:\/\/[^\s"'<>)]*ObtenMedioImpresoCorteSombreadoEnPagina\?[^\s"'<>)]*/gi).map(src=>({t:'img',src})),...U(/https?:\/\/[^\s"'<>)]*ObtenPdfCorte\?[^\s"'<>)]*/gi).map(src=>({t:'pdf',src}))]}}
-const rdHtml=(d,u)=>{const M=d.media||[],ms=M.filter(m=>m.t==='img').map(m=>'<img src="'+esc(m.src)+'" referrerpolicy="no-referrer" onerror="this.remove()" style="max-width:100%;border-radius:8px;margin-bottom:10px;display:block">').join('')+M.filter(m=>m.t==='video').map(m=>'<video controls src="'+esc(m.src)+'" style="width:100%;border-radius:8px;margin-bottom:10px"></video>').join('')+M.filter(m=>m.t==='audio').map(m=>'<audio controls src="'+esc(m.src)+'" style="width:100%;margin-bottom:10px"></audio>').join(''),fc=Object.entries(d.facts||{}).map(([k,v])=>'<span class="fc"><b>'+esc(k)+':</b> '+esc(v)+'</span>').join('');
-return'<h3 style="margin:0 0 4px">'+esc(d.title||host(u))+'</h3><div class="mu" style="font-size:11px;margin-bottom:10px">'+esc(d.site||host(u))+'</div>'+(fc?'<div class="fcs">'+fc+'</div>':'')+(d.image?'<img src="'+esc(d.image)+'" referrerpolicy="no-referrer" onerror="this.remove()" style="max-width:100%;border-radius:8px;margin-bottom:10px">':'')+ms+((d.text||[]).map(x=>'<p>'+esc(x)+'</p>').join('')||'<p class="mu">No se pudo extraer el texto de esta nota.</p>')};
-async function getRead(u){
-try{const r=await fetch('/api/leer?u='+encodeURIComponent(u));if(r.ok){const d=await r.json();if((d.text&&d.text.length)||(d.media&&d.media.length))return d}}catch(e){}
-try{const c=new AbortController();setTimeout(()=>c.abort(),15000);const r=await fetch('https://r.jina.ai/'+u,{headers:{Accept:'application/json'},signal:c.signal});if(r.ok){const j=await r.json(),d=j.data||j;
-if(isIP(u)){const x=ipParse(d.content||'');x.title=d.title;if(x.text.length||x.media.length)return x}else{const text=md2p(d.content||'');if(text.length)return{title:d.title,site:host(u),image:'',text}}}}catch(e){}
-return null}
-async function loadGen(u){const id=++GT,box=$('#vg2');if(!box)return;
-box.innerHTML='<div class="vtb" id="vtb"><button class="ba" id="vm1" data-m="r">Modo lectura</button><button class="ba g" id="vm2" data-m="w">Página web</button></div><div class="vbody" id="vbody"></div>';
-const body=$('#vbody'),sw=a=>$$('#vtb button').forEach(b=>b.classList.toggle('g',b.dataset.m!==a)),fr=(src,n)=>'<iframe src="'+esc(src)+'" style="height:62vh" referrerpolicy="no-referrer"></iframe><div class="mu" style="font-size:11px;margin-top:6px">'+n+'</div>';
-const web=n=>{sw('w');body.innerHTML=fr(u,n||'Si el recuadro sale vacío o con error, ese sitio bloquea la vista integrada: usa Modo lectura o «Abrir en nueva pestaña».')};
-let cache=null;const rd=async()=>{sw('r');body.innerHTML='<div class="mu" style="padding:20px">Cargando vista integrada…</div>';const d=cache||(cache=await getRead(u));if(id!==GT)return;
-if(d){body.innerHTML='<div class="rd">'+rdHtml(d,u)+'</div>';const pf=(d.media||[]).find(m=>m.t==='pdf');if(pf&&!$('#vm3')){const b=document.createElement('button');b.className='ba g';b.id='vm3';b.dataset.m='p';b.textContent='Corte en PDF';b.onclick=()=>{sw('p');body.innerHTML=fr(pf.src,'Si el PDF no se muestra aquí, <a href="'+esc(pf.src)+'" target="_blank" rel="noopener">ábrelo en una pestaña nueva</a>.')};$('#vtb').insertBefore(b,$('#vm2'))}}
-else web('No se pudo obtener el texto de esta nota, así que se muestra la página web. Si no se ve, usa «Abrir en nueva pestaña».')};
-$('#vm1').onclick=rd;$('#vm2').onclick=()=>web();rd()}
+/* VISTA WEB INTEGRADA (diarios y webs) */
+function loadGen(u){const b=$('#vg2');if(!b)return;b.innerHTML='<iframe src="'+esc(u)+'" style="height:62vh" referrerpolicy="no-referrer"></iframe><div class="mu" style="font-size:11px;margin-top:6px">Si el recuadro sale vacío o con error, ese sitio bloquea la vista integrada: usa «Abrir en nueva pestaña».</div>'}
 /* ZOOM DEL MAPA */
 let zk='',VB=GEO.vb.slice(),za=0;
 function setVB(a){VB=a;const m=$('#map');m.setAttribute('viewBox',a.join(' '));m.style.setProperty('--k',a[2]/GEO.vb[2])}
