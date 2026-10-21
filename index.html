@@ -96,24 +96,22 @@ td:nth-child(2){width:100%;order:3}td:nth-child(4){width:100%;order:4;font-size:
 .vf{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 16px;border-top:1px solid var(--bd);flex-wrap:wrap}
 @media(max-width:768px){.vw{padding:0}.vb{width:100%;height:100%;max-height:100%;border-radius:0}}
 @media print{
-@page{size:A4 landscape;margin:8mm}
+@page{size:A4 portrait;margin:8mm}
 *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-body,body.fit{background:#fff;font-size:11px;height:auto!important;overflow:visible!important;display:block!important}
-nav,.mbar,.ab,.ct,#ayer-c,.vw,#config-acortador,#resumen-preview,.mz{display:none!important}
+body,body.fit{background:#fff;height:auto!important;overflow:visible!important;display:block!important}
+nav,.mbar,.ab,#ayer-c,.vw,.mz,#resumen-preview{display:none!important}
 header{box-shadow:none;padding:8px 12px}
 .main{margin:8px 0;padding:0;max-width:none}
-.sc{grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}.cd{padding:6px}.cd .v{font-size:20px}
-.tbx{border:0;border-radius:0;overflow:visible;background:none}
-table{display:table!important;width:100%;min-width:0;table-layout:fixed}
-thead{display:table-header-group!important}thead tr{display:table-row!important}
-tbody{display:table-row-group!important}
-tr{display:table-row!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;break-inside:avoid}
-th{position:static}
-th,td{display:table-cell!important}
-td{width:auto!important;order:0!important;text-align:left!important;padding:8px!important;border-bottom:1px solid #bbb!important;font-size:11px}
-th:nth-child(4){width:38%!important}th:nth-child(5){width:14%!important}
+.sc{gap:8px;margin-bottom:8px}.cd{padding:6px}.cd .v{font-size:20px}
+.ct{box-shadow:none;border:1px solid #cbd5e1;grid-template-columns:repeat(3,1fr);gap:6px 8px;padding:8px;break-inside:avoid}.s3{grid-column:1/-1}
+table,thead,tbody,th,td,tr{display:block!important}thead tr{display:none!important}
+.tbx{border:0;background:none;overflow:visible}
+tr{display:flex!important;flex-wrap:wrap;align-items:center;gap:8px 0;margin:0 0 12px!important;border-radius:10px;border:1px solid #cbd5e1!important;padding:12px!important;break-inside:avoid;box-shadow:none!important}
+td{padding:0!important;border:0!important}
+td:nth-child(1){width:50%!important;order:1;font-size:11px}td:nth-child(3){width:50%!important;order:2;text-align:right!important}
+td:nth-child(2){width:100%!important;order:3}td:nth-child(4){width:100%!important;order:4;font-size:12px}td:nth-child(5){width:100%!important;order:5;margin-top:5px}
 .bl{display:none!important}
-.ext{display:block!important;background:#C8102E;color:#fff!important;text-align:center;font-size:16px;font-weight:800;padding:14px 4px;border-radius:8px;margin:0;text-decoration:none;text-transform:uppercase;letter-spacing:.6px}
+.ext{display:block!important;background:#475569;color:#fff!important;text-align:center;font-size:12px;font-weight:700;padding:9px;border-radius:8px;margin:0;text-decoration:none}
 .ar{display:none}
 }
 </style></head><body>
@@ -196,7 +194,7 @@ CUR=D.filter(r=>(!q||(r.tit+' '+r.res).toLowerCase().includes(q))&&(!v('#f-tono'
 hourOK(r,hm));
 statusT();setHdr();const k=x=>CUR.filter(r=>r.t===x).length;$('#n-t').textContent=CUR.length;$('#n-p').textContent=k('Positiva');$('#n-n').textContent=k('Neutra');$('#n-x').textContent=k('Negativa');
 $('#tbody').innerHTML=CUR.slice(0,300).map((r,ix)=>{const c=r.t==='Positiva'?['p','#86efac']:r.t==='Negativa'?['x','#fc8181']:['n','#fde047'],hr=r.mt.split(/\s+/)[1];
-return`<tr style="background:${c[1]}"><td><div style="font-weight:700">${esc(r.fecha)}</div>${hr?`<div style="font-size:10px;color:#0009;font-weight:600;margin-top:4px">Registrado: ${esc(hr)}</div>`:''}</td><td><div style="font-weight:800;margin-bottom:5px">${esc(r.tit)}</div><div style="font-size:10px;color:#555;font-weight:800;text-transform:uppercase">${esc(r.medio)} (${esc(r.tipo)})</div></td><td><span class="bd ${c[0]}">${esc(r.tono||'Neutro')}</span></td><td style="font-weight:600">${esc(r.res)}</td><td style="text-align:center">${furl(r.link)?`<button class="bl" onclick="openV('t',${ix})">▶ Ver aquí</button><a class="ext" href="${esc(furl(r.link))}" target="_blank" rel="noopener">Abrir<span class="ar"> ↗</span></a>`:'<span class="mu">Sin enlace</span>'}</td></tr>`}).join('')||`<tr><td colspan="5" style="text-align:center;padding:50px;color:#6b5d61">${ALL.length?'No hay noticias para mostrar con estos filtros.<br><br><button class="ba g" onclick="mode_(\'month\')">Ver este mes</button>':'Aún no hay registros en el formulario.'}</td></tr>`}
+return`<tr style="background:${c[1]}"><td><div style="font-weight:700">${esc(r.fecha)}</div>${hr?`<div style="font-size:10px;color:#0009;font-weight:600;margin-top:4px">Registrado: ${esc(hr)}</div>`:''}</td><td><div style="font-weight:800;margin-bottom:5px">${esc(r.tit)}</div><div style="font-size:10px;color:#555;font-weight:800;text-transform:uppercase">${esc(r.medio)} (${esc(r.tipo)})</div></td><td><span class="bd ${c[0]}">${esc(r.tono||'Neutro')}</span></td><td style="font-weight:600">${esc(r.res)}</td><td style="text-align:center">${furl(r.link)?`<button class="bl" onclick="openV('t',${ix})">▶ Ver aquí</button><a class="ext" href="${esc(furl(r.link))}" target="_blank" rel="noopener">Abrir nota<span class="ar"> ↗</span></a>`:'<span class="mu">Sin enlace</span>'}</td></tr>`}).join('')||`<tr><td colspan="5" style="text-align:center;padding:50px;color:#6b5d61">${ALL.length?'No hay noticias para mostrar con estos filtros.<br><br><button class="ba g" onclick="mode_(\'month\')">Ver este mes</button>':'Aún no hay registros en el formulario.'}</td></tr>`}
 function hourOK(r,hm){if(hm<0)return true;if(mode==='ayer'){if(r.ts===AT){if(pd(r.mt)===HT)return true;if(r.hora!==-1&&r.hora<hm)return false}return true}return!(r.hora!==-1&&r.hora<hm)}
 function statusT(){const m={hoy:mostrarAyer?'Mostrando: Hoy + rezagos de ayer (notas de ayer registradas hoy)':'Mostrando: solo hoy',ayer:'Mostrando: Ayer y Hoy',specific:'Mostrando fecha seleccionada',rango:($('#rd').value&&$('#rh').value)?'Mostrando rango: '+$('#rd').value+' a '+$('#rh').value:'Elige fecha Desde y Hasta',month:'Mostrando: este mes'};let t=m[mode]||'';if($('#fh').value)t+=mode==='ayer'?' (ayer desde las '+$('#fh').value+' y todo hoy)':' (desde las '+$('#fh').value+')';$('#stt').textContent=t;$('#ayer-c').style.display=mode==='hoy'?'block':'none';$('#btn-ayer').textContent=mostrarAyer?'➖ Ocultar notas de ayer (registradas hoy)':'➕ Incluir notas de ayer (registradas hoy)'}
 function setHdr(){let t;if(tab==='tabla'){t=({hoy:mostrarAyer?'Hoy + rezagos de ayer':'Solo hoy',ayer:'Ayer + hoy',specific:'Fecha seleccionada',rango:'Rango personalizado',month:'Este mes'})[mode]+' · '+CUR.length+' notas'}else{const m=$('#mes').value;t=(!m||m==='all')?'Todo el período':MN[+m.slice(5)-1]+' '+m.slice(0,4);t=t[0].toUpperCase()+t.slice(1)+' · '+MD().length+' notas'}$('#dc').textContent=t}
